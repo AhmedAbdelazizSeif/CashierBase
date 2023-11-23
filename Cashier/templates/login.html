@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href={% static "/fonts/font-awesome.min.css" %}>
+    <link rel="stylesheet" href={% static "/css/Login-screen.css" %}>
+{% endblock %}
+
+{% block content %}
+    <div id="login-one" class="login-one">
+        <form class="login-one-form" method="post" action={% url 'login_submit' %}>
+            {% csrf_token %}
+            <div class="col">
+                <div class="login-one-ico"><i class="fa fa-unlock-alt" id="lockico"></i></div>
+                <div class="form-group mb-3">
+                    <div>
+                        <h3 id="heading">Log in:</h3>
+                    </div>
+                    {% if error_message %}
+                        <p style="color:red;">{{ error_message }}</p>
+                    {% endif %}
+                    <input class="form-control" type="text" id="input-1" name="user" placeholder="Username"><input
+                        class="form-control" type="password" id="input-2" name="passwd" placeholder="Password">
+                    <button class="btn btn-primary" id="button" style="background-color:#007ac9;" type="submit">Log in
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

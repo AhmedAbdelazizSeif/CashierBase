@@ -1,0 +1,13 @@
+
+epython:S1192"MDefine a constant instead of duplicating this literal "IronPdf.Slim" 9 times.(’¡È§
+àpython:S1192"ÇDefine a constant instead of duplicating this literal 'Warning! Failed to install .NET 6.0. Consider manually installing .NET 6.0 from https://dotnet.microsoft.com/en-us/download/dotnet/6.0' 3 times.(¤ëÊ‡
+ipython:S1192 "LDefine a constant instead of duplicating this literal "IronPdf.dll" 5 times.(«Â«±ÿÿÿÿÿ
+Qpython:S1135"4Complete the task associated to this "TODO" comment.(‹Èúÿÿÿÿ
+Tpython:S5754"<Specify an exception class to catch or reraise the exception(ˆÊÉ·
+Tpython:S5754%"<Specify an exception class to catch or reraise the exception(ˆÊÉ·
+Tpython:S57545"<Specify an exception class to catch or reraise the exception(ˆÊÉ·
+Upython:S1128">Replace this generic exception class with a more specific one.(äÎß­
+dpython:S1542]"LRename function "ToPage" to match the regular expression ^[a-z_][a-z0-9_]*$.(¼«ó¬
+hpython:S1542e"PRename function "ToPageList" to match the regular expression ^[a-z_][a-z0-9_]*$.(™å„
+npython:S1542n"QRename function "ToPageRange" to match the regular expression ^[a-z_][a-z0-9_]*$.(Ÿ–ğüÿÿÿÿ
+fpython:S1542w"IRename function "Now" to match the regular expression ^[a-z_][a-z0-9_]*$.(½–åúÿÿÿÿ

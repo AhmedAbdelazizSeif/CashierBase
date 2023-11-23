@@ -1,0 +1,5 @@
+
+6python:S125"Remove this commented out code.(ËÂŽá
+Mpython:S6553"0Replace this "null=True" flag with "blank=True".(Ñè½¯ÿÿÿÿÿ
+Fpython:S1481-"'Remove the unused local variable "ean".(êÏ˜¹8ì¢“˜º1
+Mpython:S65538"0Replace this "null=True" flag with "blank=True".(Ñè½¯ÿÿÿÿÿ

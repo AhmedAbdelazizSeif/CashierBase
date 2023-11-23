@@ -1,0 +1,51 @@
+Cashier/
+├── admin.py
+├── apps.py
+├── data_sync.py
+├── __init__.py
+├── management
+│   ├── commands
+│   │   ├── __init__.py
+│   │   └── synchronize_data.py
+│   └── __init__.py
+├── migrations
+│   ├── 0001_initial.py
+│   └── __init__.py
+├── migrations.py
+├── models.py
+├── templates
+│   ├── assets
+│   │   ├── bootstrap
+│   │   │   ├── css
+│   │   │   │   └── bootstrap.min.css
+│   │   │   └── js
+│   │   │       └── bootstrap.min.js
+│   │   ├── css
+│   │   │   ├── Gamanet_Header_bs5.css
+│   │   │   ├── generic.css
+│   │   │   └── Login-screen.css
+│   │   ├── fonts
+│   │   │   └── font-awesome.min.css
+│   │   ├── img
+│   │   │   ├── avatar-placeholder.png
+│   │   │   ├── C4-outline.svg
+│   │   │   ├── icon_chevron-down.svg
+│   │   │   ├── icon_log-out.svg
+│   │   │   ├── icon_user.svg
+│   │   │   └── LogoText_PluginStore.svg
+│   │   ├── __init__.py
+│   │   └── js
+│   │       ├── bs-init.js
+│   │       ├── chart.min.js
+│   │       ├── Gamanet_Header_bs5.js
+│   │       └── get_product.js
+│   ├── base.html
+│   ├── dashboard.html
+│   ├── index.html
+│   ├── __init__.py
+│   ├── login.html
+│   └── testInvoice.html
+├── tests.py
+├── urls.py
+└── views.py
+

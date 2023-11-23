@@ -1,0 +1,4 @@
+
+_python:S2208"GImport only needed names or import the module and then use its members.(Ğ¯«
+tpython:S117"XRename this parameter "relayoutData" to match the regular expression ^[_a-z][a-z0-9_]*$.(É€×®ùÿÿÿÿ
+tpython:S117$"XRename this parameter "relayoutData" to match the regular expression ^[_a-z][a-z0-9_]*$.(×£«ûÿÿÿÿ

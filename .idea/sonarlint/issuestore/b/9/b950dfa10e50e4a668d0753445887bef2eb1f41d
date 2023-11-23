@@ -1,0 +1,8 @@
+
+fpython:S2208
+"GImport only needed names or import the module and then use its members.(ÈùàÂ8áâÂº1
+Npython:S1172"/Remove the unused function parameter "request".(°ÒØ£8›¼ßÂº1
+‚python:S117%"_Rename this local variable "invoiceDetails" to match the regular expression ^[_a-z][a-z0-9_]*$.(ÜĞŞæüÿÿÿÿ8›¼ßÂº1
+‚python:S117A"_Rename this local variable "invoiceDetails" to match the regular expression ^[_a-z][a-z0-9_]*$.(ÜĞŞæüÿÿÿÿ8›¼ßÂº1
+Kpython:S1481U",Remove the unused local variable "renderer".(ä°Íõ8›¼ßÂº1
+Lpython:S1481V"(Remove the unused local variable "html".(½ªúúÿÿÿÿ8œ¼ßÂº1

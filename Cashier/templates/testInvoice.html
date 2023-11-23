@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sold Items{% endblock %}
+
+{% block content %}
+<h1>Sold Items for {{ date }}</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sold_item in sold_items %}
+            <tr>
+                <td>{{ sold_item.product }}</td>
+                <td>{{ sold_item.quantity }}</td>
+                <td>{{ sold_item.price }}</td>
+                <td>{{ sold_item.total }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+Total Revenue: {{ total_revenue }}
+{% endblock %}

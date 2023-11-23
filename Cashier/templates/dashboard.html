@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% load plotly_dash %}
+    {%plotly_app name='DashboardApp' ratio=1%}
+{% endblock %}
