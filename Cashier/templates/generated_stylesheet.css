@@ -1,0 +1,22 @@
+
+.form-control {
+    margin-left: 80%;
+    width: -webkit-fill-available;
+}
+
+
+.element {
+    width: inherit;
+}
+
+.table {
+    width: 100%;
+}
+
+
+.text-center {
+    align-self: center;
+    vertical-align: middle;
+    align-content: center;
+    align-items: center;
+}
