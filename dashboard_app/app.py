@@ -1,10 +1,9 @@
-import dash
+from datetime import datetime
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import plotly.express as px
-import pymysql
 from sqlalchemy import create_engine
 import pandas as pd
 from django_plotly_dash import DjangoDash
@@ -31,7 +30,7 @@ def query_data(sql, columns=None):
 # Define a function to create a graph from a dataframe
 def create_graph(df, x, y, title, graph_type='line'):
     if graph_type == 'line':
-        fig = go.Figure([go.Scatter(x=df[x], y=df[y], mode='lines+markers')])
+        fig = go.Figure([go.Scatter(x=df[x], y=df[y], mode='lines+markers',line_shape='spline')])
     elif graph_type == 'bar':
         fig = go.Figure([go.Bar(x=df[x], y=df[y])])
     # Add more graph types as needed
@@ -75,68 +74,55 @@ def card_column(header, current_value_query, comparison_value_query):
 # Initialize the Dash app with Bootstrap components
 app = DjangoDash('DashboardApp', external_stylesheets=[
     # dbc.themes.BOOTSTRAP,
-    'https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css'
 ])
 
-app.layout = html.Div([
-    html.Div([
-        html.H2('GroceryTracker Overview', className='text-xl'),
-        # Other sidebar components here
-    ], className='sidebar bg-gray-200 p-4'),
-
-    html.Div([
-        html.Div([
-            # Overview cards
-            html.Div('Total Sales', className='card'),
-            # Other cards
-        ], className='flex flex-wrap gap-4'),
-
-        dcc.Graph(
-            id='sales-overview',
-            figure={
-                # Define your figure here
-            }
-        )
-        # Other main content components here
-    ], className='content flex-1 p-4')
-], className='main-container flex')
+# app.layout = html.Div([
+#     html.Div([
+#         html.H2('GroceryTracker Overview', className='text-xl'),
+#         # Other sidebar components here
+#     ], className='sidebar bg-gray-200 p-4'),
+#
+#     html.Div([
+#         html.Div([
+#             # Overview cards
+#             html.Div('Total Sales', className='card'),
+#             # Other cards
+#         ], className='flex flex-wrap gap-4'),
+#
+#         dcc.Graph(
+#             id='sales-overview',
+#             figure={
+#                 # Define your figure here
+#             }
+#         )
+#         # Other main content components here
+#     ], className='content flex-1 p-4')
+# ], className='main-container flex')
+datetoday = datetime.now().date().strftime("%Y-%m-%d")
 
 ## best Layout
-# Define the layout of the app using Bootstrap components
-# app.layout = html.Div([
-#     dbc.Row(
-#         [
-#             card_column('Daily Sales', "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE date = CURDATE();",
-#                         "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE date = CURDATE() - INTERVAL 1 DAY;"),
-#             card_column('Weekly Sales',
-#                         "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE WEEK(date) = WEEK(CURDATE());"
-#                         ,
-#                         "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE WEEK(date) = WEEK(CURDATE()) - 1;"),
-#             card_column('Monthly Sales',
-#                         "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE MONTH(date) = MONTH(CURDATE());",
-#                         "SELECT SUM(total) as total_sales FROM Cashier_invoice WHERE MONTH(date) = MONTH(CURDATE()) - 1;"),
-#         ]),
-#     dbc.Container(fluid=True, children=[
-#         dbc.Row([
-#             dbc.Col(dcc.Graph(id='sales-graph'), width=12, lg=6),
-#             dbc.Col(dcc.Graph(id='stock-graph'), width=12, lg=6),
-#             # Add additional tiles (graphs) here
-#         ]),
-#         dbc.Row([
-#             dcc.DatePickerRange(
-#                 id='date-range',
-#                 start_date_placeholder_text="Start Period",
-#                 end_date_placeholder_text="End Period",
-#                 calendar_orientation='horizontal',
-#                 start_date='2023-10-22',
-#                 end_date='2023-11-15',
-#             ),
-#             dcc.Graph(id='pie-chart')
-#         ]),
-#         dcc.Interval(id='update-interval', interval=30 * 1000, n_intervals=0)  # Update every minute
-#     ], className='my-4'),
-#     html.Footer(html.P('Copyright Information, Privacy Policy, and Terms of Service links'))
-# ])
+app.layout = html.Div([
+    dbc.Container(fluid=True, children=[
+        dbc.Row([
+            dbc.Col(dcc.Graph(id='sales-graph'), width=12, lg=6),
+            dbc.Col(dcc.Graph(id='stock-graph'), width=12, lg=6),
+            # Add additional tiles (graphs) here
+        ]),
+        dbc.Row([
+            dcc.DatePickerRange(
+                id='date-range',
+                start_date_placeholder_text="Start Period",
+                end_date_placeholder_text="End Period",
+                calendar_orientation='horizontal',
+                start_date=datetoday,
+                end_date=datetoday,
+            ),
+            dcc.Graph(id='pie-chart')
+        ]),
+        dcc.Interval(id='update-interval', interval=30 * 1000, n_intervals=0)  # Update every minute
+    ], className='my-4'),
+    html.Footer(html.P('Copyright Information, Privacy Policy, and Terms of Service links'))
+])
 
 
 @app.callback(
@@ -157,6 +143,9 @@ def update_chart(start_date, end_date):
         LIMIT 4
         """.format(start_date, end_date))
         fig = px.pie(df, values='total_quantity', names='name', title='Top Sales')
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_xaxes(visible=False)
+        fig.update_yaxes(visible=False)
         return fig
     return {}
 
@@ -176,7 +165,7 @@ def update_sales_graph(n_intervals):
     [Input('update-interval', 'n_intervals')]
 )
 def update_stock_graph(n_intervals):
-    sql_query = "SELECT name, stock FROM Cashier_product;"
+    sql_query = "SELECT name, stock FROM Cashier_product WHERE stock > 5 LIMIT 200;"
     df = query_data(sql_query)
     return create_graph(df, 'name', 'stock', 'Current Stock Levels', graph_type='bar')
 

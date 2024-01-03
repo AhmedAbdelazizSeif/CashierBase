@@ -1,30 +1,54 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block title %}Login{% endblock %}
-{% block head %}
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static "js/tailwindcss.js" %}"></script>
+    <title>Login</title>
     <link rel="stylesheet" href={% static "/fonts/font-awesome.min.css" %}>
-    <link rel="stylesheet" href={% static "/css/Login-screen.css" %}>
-{% endblock %}
+    <script src="{% static "js/tailwindcss.js" %}"></script>
+</head>
+<body class="h-full">
+<div class="flex min-h-full flex-col mx-auto justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <object data="{% static "/img/shopping_cart_transparent.svg" %}"
+                type="image/svg+xml" class="h-20 w-auto mx-auto"></object>
+        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your
+            account</h2>
+    </div>
 
-{% block content %}
-    <div id="login-one" class="login-one">
-        <form class="login-one-form" method="post" action={% url 'login_submit' %}>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form class="space-y-3" action="{% url 'login_submit' %}" method="POST" action="{% url 'login_submit' %}">
             {% csrf_token %}
-            <div class="col">
-                <div class="login-one-ico"><i class="fa fa-unlock-alt" id="lockico"></i></div>
-                <div class="form-group mb-3">
-                    <div>
-                        <h3 id="heading">Log in:</h3>
-                    </div>
-                    {% if error_message %}
-                        <p style="color:red;">{{ error_message }}</p>
-                    {% endif %}
-                    <input class="form-control" type="text" id="input-1" name="user" placeholder="Username"><input
-                        class="form-control" type="password" id="input-2" name="passwd" placeholder="Password">
-                    <button class="btn btn-primary" id="button" style="background-color:#007ac9;" type="submit">Log in
-                    </button>
+
+            <div>
+                <label for="user" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                <div class="mt-2">
+                    <input id="user" name="user" type="text" autocomplete="user" required
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                </div>
+                <div class="mt-2">
+                    <input id="password" name="passwd" type="password" autocomplete="current-password" required
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+            {% if error_message %}
+                <span style="color:red;">{{ error_message }}</span>
+            {% endif %}
+
+            <div>
+                <button type="submit"
+                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Sign in
+                </button>
             </div>
         </form>
     </div>
-{% endblock %}
+</div>
+</body>

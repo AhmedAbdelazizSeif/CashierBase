@@ -1,114 +1,115 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% load static %}
-
+{% load crispy_forms_field %}
+{% load custom_elements %}
 {% block content %}
 
-    <main>
-        <header>
-            <div class="container mt-5">
-                <div class="row"><h1>فاتورة منتجات</h1></div>
-                <div class="row">
+    <h1 class="text-3xl font-semibold text mt-5">فاتورة منتجات</h1>
+    <div class="flex flex-wrap justify-between mt-5">
 
-                    <div class="col-md-4">
+        <div class="w-full md:w-1/3 px-2">
+            <div class="flex space-x-2">
+                <input class="form-control flex-grow border border-gray-300 rounded p-2"
+                       type="text" id="item-barcode">
+                <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                        type="button" id="add-item" onclick="addItem();">
+                    اضافة منتج
+                </button>
+            </div>
 
-                        <div class="input-group mb-3"><input class="form-control form-control" type="text"
-                                                             id="item-barcode">
-                            <button class="btn btn-primary" type="button" id="add-item" onclick="addItem();">
-                                اضافة
-                                منتج
-                            </button>
+            <form id="customer-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="space-y-12">
+                    <div class="border-b border-gray-900/10 pb-12">
+                        <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                            {% floating_label_input "رقم الموبايل" "mobile" "4" "oninput" "getCustomerDetails()"%}
+                            {% floating_label_input "الاسم الاخير" "last_name" "3" %}
+                            {% floating_label_input "الاسم الاول" "first_name" "3" %}
+                            {% floating_label_input "الرقم الارضي" "landline" "3" %}
+                            {% floating_label_input "العنوان" "street_address" "full" %}
+
                         </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div>
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th style="display: none" scope="col">كود المنتج</th>
-                                    <th scope="col">المنتج</th>
-                                    <th scope="col">الكمية</th>
-                                    <th scope="col">سعر الوحدة</th>
-                                    <th scope="col">الاجمالي</th>
-                                    <th scope="col">حذف</th>
-                                </tr>
-                                </thead>
-                                <tbody id="invoice-items"></tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="text-end">
-                                    <p>:الاجمالي
-                                        <br>
-                                        <span id="total-value"></span>
-
-                                    </p>
-
-                                    <p><!--suppress CssInvalidPropertyValue -->
-                                        <input class="form-control form-control text-end end" type="number"
-                                               placeholder="المدفوع"
-                                               style="margin-left: 80%;width: -webkit-fill-available;"
-                                               oninput="updateChange(this)"></p>
-                                    <p>الباقي: <span id="change">0</span></p>
-                                    <form action="{% url 'send_invoice' %}" method="post"
-                                          onsubmit="getInvoiceDetails()">
-                                        {% csrf_token %}
-                                        <input type="hidden" id="invoiceDetails" name="invoiceDetails">
-
-                                        <div class="card" style="width: 80mm;display: none;">
-                                            <div class="card-header">
-                                                <h5 class="text-center mb-0">سوبر ماركت زيتون</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div style="width: inherit;">
-                                                    <table class="table table-striped" style="width: 100%;">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col" style="display: none;">كود المنتج</th>
-                                                            <th scope="col">المنتج</th>
-                                                            <th scope="col">الكمية</th>
-                                                            <th scope="col">سعر الوحدة</th>
-                                                            <th scope="col">الاجمالي</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody id="invoice-items-panel">
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="text-end">
-                                                            <p>:الاجمالي <br/><span id="total-value-panel">42</span>
-                                                            </p>
-                                                            <p><span id="paid-panel">50</span></p>
-                                                            <p>الباقي: <span id="change-panel">8</span></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer"><span class="text-center"
-                                                                           style="align-self: center;vertical-align: middle;align-content: center;align-items: center;">امام كافيتريا بارني شارع المدينة المنورة  - العصافرة اسكندرية</span>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-success" type="submit">
-                                            حفظ وطباعة الفاتورة
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="reset" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                    <button type="submit"
+                            class="inline-flex items-center justify-center h-10 px-6 text-sm font-semibold leading-6
+                            text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg
+                            shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="submit-user">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="w-full md:w-1/2  mt-4 md:mt-0">
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 hidden">كود المنتج</th>
+                        <th class="px-6 py-3">المنتج</th>
+                        <th class="px-6 py-3">الكمية</th>
+                        <th class="px-6 py-3">سعر الوحدة</th>
+                        <th class="px-6 py-3">الاجمالي</th>
+                        <th class="px-6 py-3">حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody id="invoice-items" class="bg-white"></tbody>
+                </table>
             </div>
-        </header>
-    </main>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <div class="mt-4">
+                <div class="text-right">
+                    <p>الاجمالي: <span id="total-value"></span></p>
+                    <input class="form-control border border-gray-300 rounded p-2 w-full md:w-1/3 text-right"
+                           type="number" placeholder="المدفوع" oninput="updateChange(this)">
+                    <p class="mt-2">الباقي: <span id="change">0</span></p>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
+                    <form action="{% url 'send_invoice' %}" method="post" onsubmit="getInvoiceDetails()">
+                        {% csrf_token %}
+                        <input type="hidden" id="invoiceDetails" name="invoiceDetails">
+                        <div class="card hidden bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div class="card-header p-4">
+                                <h5 class="text-center mb-0">سوبر ماركت زيتون</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <table class="table-auto w-full text-sm text-left text-gray-500">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th class="hidden">كود المنتج</th>
+                                        <th>المنتج</th>
+                                        <th>الكمية</th>
+                                        <th>سعر الوحدة</th>
+                                        <th>الاجمالي</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="invoice-items-panel" class="bg-white"></tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer text-center p-4">
+                                <span>امام كافيتريا بارني شارع المدينة المنورة - العصافرة اسكندرية</span>
+                            </div>
+                        </div>
+                        <button class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+                                type="submit">
+                            حفظ وطباعة الفاتورة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script>
+    var deleteIconUrl = "{% static 'img/delete.svg' %}";
+    </script>
     <script src="{% static 'js/get_product.js' %}"></script>
 
 {% endblock %}

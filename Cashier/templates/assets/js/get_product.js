@@ -12,16 +12,6 @@ function updateTotalValue() {
     document.getElementById('total-value').textContent = totalValue;
 }
 
-function onKeyDown(event) {
-    console.log('here')
-    const textbox = event.target;
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        // Press the button.
-        const button = document.querySelector('#add-item');
-        button.click();
-    }
-}
 
 function findRowByBarcode(barcode) {
     const barcodeElements = document.querySelectorAll('.item-barcode');
@@ -66,20 +56,22 @@ function addItem() {
 
                 // Create a new table row for the item
                 const tableRow = document.createElement('tr');
-                tableRow.classList.add('item-row')
+                tableRow.classList.add('item-row');
 
                 // Add the item details to the table row
                 tableRow.innerHTML = `
-            <td style="display: none" class="item-barcode">${itemData.ean}</td>
-          <td class="item-name">${itemData.name}</td>
-          <td><input type="number" min="1" value="1" class="quantity-input" onchange="updateItemTotalPrice(this)"></td>
-          <td class="item-price">${itemData.price}</td>
-          <td><span class="total-price-item">${itemData.price}</span></td>
-            <td><a class="btn btn-danger btn-sm" onclick="deleteItem(this);this.parentNode.parentNode.remove(); updateTotalValue();"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-    </svg></a></td>
-        `;
+                <td style="display: none" class="item-barcode">${itemData.ean}</td>
+                <td class="item-name">${itemData.name}</td>
+                <td><input type="number" min="1" value="1" class="no-spinner border-0 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer " onchange="updateItemTotalPrice(this)"></td>
+                <td class="item-price">${itemData.price}</td>
+                <td><span class="total-price-item">${itemData.price}</span></td>
+                <td>
+                    <a class="inline-flex items-center rounded-md px-2 text-sm font-semibold leading-5 text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:shadow-outline w-6 h-6" onclick="deleteItem(this);this.parentNode.parentNode.remove(); updateTotalValue();">
+                        <object data="${deleteIconUrl}" class="mx-auto" type="image/svg+xml" width="16" height="16"></object>
+                    </a>
+                </td>
+                `;
+
 
                 // Add the table row to the table
                 document.getElementById('invoice-items').appendChild(tableRow);
@@ -102,10 +94,8 @@ function addItem() {
 
 function updateItemTotalPrice(element) {
     // Calculate the new total price for the item
-    const newTotalPrice = parseFloat(element.value) * parseFloat(element.parentNode.parentNode.querySelector('.item-price').textContent);
-
     // Update the total price element for the item with the new total price
-    element.parentNode.parentNode.querySelector('.total-price-item').textContent = newTotalPrice;
+    element.parentNode.parentNode.querySelector('.total-price-item').textContent = parseFloat(element.value) * parseFloat(element.parentNode.parentNode.querySelector('.item-price').textContent);
 
     // Update the total value of the invoice
     updateTotalValue();
@@ -133,81 +123,7 @@ function deleteItem(button) {
 }
 
 
-function printDiv(divName) {
-    var printContents = document.getElementById(divName).innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    document.body.innerHTML = originalContents;
-
-}
-
-
 // function to get the invoice details with each item quantities without sending to the server
-function getInvoiceDetails() {
-    let invoiceDetails = {};
-    /* const table = document.querySelector('table')
-    const tableRows = table.rows
-    let panel_table = document.getElementById('invoice-items-panel')
-
-    for (let i = 1; i < tableRows.length; i++) {
-        const row = tableRows[i];
-        const rowCells = row.cells
-        let panel_row = document.createElement('tr')
-        for (let j = 1; j < rowCells.length - 1; j++) {
-            const cell = rowCells[j];
-            let panel_cell = document.createElement('td')
-            // check if the cell is a quantity input if so just take out its value
-            if (cell.querySelector('.quantity-input')) {
-                panel_cell.innerHTML = cell.querySelector('.quantity-input').value
-                panel_row.appendChild(panel_cell)
-                continue
-            }
-            panel_cell.innerHTML = cell.innerHTML
-            panel_row.appendChild(panel_cell)
-        }
-        panel_table.appendChild(panel_row)
-    }
-    let print_panel = document.getElementById('print-panel')
-
-    const data ={element: print_panel.outerHTML}
-    jQuery.post('/print/', data, function (response) {
-        console.log(response)
-    });*/
-
-
-
-    // Invoice Details filling
-    for (let i = 0; i < items.length; i++) {
-        const itemBarcode = items[i];
-        const itemQuantity = document.querySelectorAll('.quantity-input')[i].value;
-        invoiceDetails[itemBarcode] = itemQuantity;
-    }
-    console.log(invoiceDetails)
-    // Set the value of the hidden input field
-    document.getElementById('invoiceDetails').value = JSON.stringify(invoiceDetails);
-
-    // Submit the form
-    document.getElementById('invoiceForm').submit();
-
-
-}
-
-function testPdf() {
-    //send the div to PDF
-    html2canvas($("#print-panel"), { // DIV ID HERE
-        onrendered: function (canvas) {
-            var imgData = canvas.toDataURL('image/png');
-            var doc = new jsPDF('portrait', 'in', [canvas.width, canvas.height], true);
-            doc.addImage(imgData, 'PDF', 10, 10);
-            doc.save('~/data.pdf'); //SAVE PDF FILE
-        }
-    });
-
-}
 
 
 document.getElementById('item-barcode').addEventListener('keydown', function (event) {
@@ -218,5 +134,107 @@ document.getElementById('item-barcode').addEventListener('keydown', function (ev
         button.click();
     }
 });
+
+
+// Define URL for searching customer by phone number
+const customerSearchUrl = "/get_customer_details/";
+
+// Initialize customer data object
+let customerData = {};
+var selectedCustomerId = null; // Global variable to store the customer ID
+
+function getCustomerDetails() {
+
+    var mobileNumber = $('#mobile').val();
+
+    // Clear customer data on empty input
+    if (!mobileNumber) {
+        customerData = {};
+        selectedCustomerId = null;
+        clearCustomerFields();
+        return;
+    }
+
+    // Send AJAX request for customer data
+    $.ajax({
+        url: customerSearchUrl + mobileNumber, method: "GET", success: function (data) {
+            // Populate customer data
+            selectedCustomerId = data.id;
+            console.log("Selected customer id updated to"+selectedCustomerId)
+            $("#first_name").val(data.first_name.split(" ")[0]);
+            $("#last_name").val(data.last_name.split(" ")[1]);
+            $("#street_address").val(data.address);
+            $("#landline").val(data.phone2);
+        }, error: function (xhr, status, error) {
+            if (xhr.status === 404) {
+                selectedCustomerId = null;
+                clearCustomerFields();
+            }
+        }
+    });
+}
+
+function clearCustomerFields() {
+    $("#first_name, #last_name, #street_address, #landline").val("");
+}
+
+function submitNewCustomer() {
+    // Get the CSRF token from the hidden input field
+    const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+    const customerData = {
+        'first_name': $('#first_name').val(),
+        'last_name': $('#last_name').val(),
+        'phone': $('#mobile').val(),
+        'phone2': $('#landline').val(),
+        'address': $('#street_address').val(),
+        'change': $('#change').val(),
+        'debt': $('#debt').val()
+    };
+
+    $.ajax({
+        url: '/new_customer/',
+        method: 'POST',
+        data: customerData,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrfToken); // Include the CSRF token in the AJAX request
+        },
+        success: function(response) {
+            selectedCustomerId = response.customer_id;
+            console.log("New customer created with ID:", selectedCustomerId);
+        },
+        error: function(error) {
+            console.error("Error creating new customer:", error);
+        }
+    });
+}
+
+$('#submit-user').on('click', function(event) {
+    event.preventDefault();
+    submitNewCustomer();
+});
+
+
+
+function getInvoiceDetails() {
+    let invoiceDetails = {products: {}, customer: selectedCustomerId};
+
+    // Invoice Details filling
+    for (let i = 0; i < items.length; i++) {
+        const itemBarcode = items[i];
+        if (itemBarcode === '') {
+            continue
+        }
+        invoiceDetails.products[itemBarcode] = document.querySelectorAll('.quantity-input')[i].value;
+    }
+    console.log(invoiceDetails)
+    // Set the value of the hidden input field
+    document.getElementById('invoiceDetails').value = JSON.stringify(invoiceDetails);
+
+    // Submit the form
+    document.getElementById('invoiceForm').submit();
+
+
+}
 
 

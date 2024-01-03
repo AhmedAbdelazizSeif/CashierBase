@@ -4,10 +4,10 @@
 {% block title %}Sold Items{% endblock %}
 
 {% block content %}
-<h1>Sold Items for {{ date }}</h1>
+<h1 class="text-3xl">Sold Items for {{ date }}</h1>
 
-<table>
-    <thead>
+<table class="table-auto md:w-1/2 text-sm text-left text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
             <th>Product</th>
             <th>Quantity</th>
@@ -18,10 +18,10 @@
     <tbody>
         {% for sold_item in sold_items %}
             <tr>
-                <td>{{ sold_item.product }}</td>
-                <td>{{ sold_item.quantity }}</td>
-                <td>{{ sold_item.price }}</td>
-                <td>{{ sold_item.total }}</td>
+                <td class="text-lg">{{ sold_item.product }}</td>
+                <td class="text-lg">{{ sold_item.quantity }}</td>
+                <td class="text-lg">{{ sold_item.price }}</td>
+                <td class="text-lg">{{ sold_item.total }}</td>
             </tr>
         {% endfor %}
     </tbody>

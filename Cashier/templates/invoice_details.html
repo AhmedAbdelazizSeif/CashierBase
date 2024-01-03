@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Invoice Details{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <div class="mb-5">
+        <h1 class="text-2xl font-bold">Invoice Details</h1>
+    </div>
+
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Invoice ID: {{ invoice.custom_id }}</h2>
+        </div>
+        <div class="mb-4">
+            <p><strong>Date:</strong> {{ invoice.date|date:"Y-m-d" }}</p>
+            <p><strong>Customer:</strong> {{ invoice.customer.name }}</p>
+            <p><strong>Cashier:</strong> {{ invoice.cashier.first_name }} {{ invoice.cashier.last_name }}</p>
+            <p><strong>Cashier Username:</strong> {{ invoice.cashier.username }}</p>
+            <p><strong>Total Amount:</strong> {{ invoice.total }}</p>
+        </div>
+
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Product
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Quantity
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Price
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Total
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice_items %}
+                <tr>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ item.product.name }}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ item.quantity }}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ item.price }}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ item.total }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

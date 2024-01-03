@@ -24,11 +24,13 @@ SECRET_KEY = 'django-insecure-^ol0puivs(8$ao&ae_=w4o65ak66c7u2+ynhg(zr_rr+iz67$c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +42,16 @@ INSTALLED_APPS = [
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'dashboard_app',
     #     'reactpy_django',
+    'django_ajax',
+    'crispy_forms',
+    'crispy_tailwind',
+    'django_tailwind_cli'
+
+
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = 'tailwind'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

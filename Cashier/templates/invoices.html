@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Invoices{% endblock %}
+{% block head %}
+    <script src="{% static 'js/invoices.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+                <h1 class="mb-4 text-2xl font-bold">Invoices</h1>
+
+    <div class="container mx-auto p-4">
+
+        <div class=" justify-center mt-5 mx-auto">
+            <form method="post" action="{% url 'archive_invoices' %}">
+                {% csrf_token %}
+                <div class="flex items-center justify-between mb-4">
+                    <!-- Your existing layout and filters -->
+                    <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-400 focus:ring-4 focus:ring-gray-300">
+                        Archive
+                    </button>
+                    <a class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-400 focus:ring-4 focus:ring-gray-300"
+                       href="{% url 'archived_invoices' %}">Archived Invoices</a>
+                </div>
+
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <input type="checkbox"
+                                   class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                   id="select-all">
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Customer
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Total
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for invoice in invoices %}
+                        <tr class="bg-white">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <input name="selected-invoices" type="checkbox" value="{{ invoice.custom_id }}"
+                                       class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                       data-invoice-id="{{ invoice.custom_id }}">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><a
+                                    href="{% url 'invoice_details' invoice.custom_id %}">{{ invoice.custom_id }}</a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ invoice.customer }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ invoice.total }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ invoice.date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </form>
+        </div>
+    </div>
+
+
+    {% if invoices.has_previous or invoices.has_next %}
+        <nav aria-label="Page navigation" class="flex justify-center">
+            <ul class="flex list-none">
+                {% if invoices.has_previous %}
+                    <li class="mr-2">
+                        <a class="px-4 py-2 border rounded text-blue-600 hover:bg-blue-600 hover:text-white"
+                           href="?page={{ invoices.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for num in invoices.paginator.page_range %}
+                    <li class="mr-2 {% if num == invoices.number %}bg-blue-600 text-white{% else %}border{% endif %}">
+                        <a class="px-4 py-2 rounded hover:bg-blue-600 hover:text-white"
+                           href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                {% if invoices.has_next %}
+                    <li class="mr-2">
+                        <a class="px-4 py-2 border rounded text-blue-600 hover:bg-blue-600 hover:text-white"
+                           href="?page={{ invoices.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    </div>
+{% endblock %}
